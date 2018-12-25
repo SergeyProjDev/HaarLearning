@@ -1,0 +1,14 @@
+C:\Users\Sergey\Desktop\jpgMaker\jpgMaker\bin\Debug\jpgMaker.exe
+C:\Users\Sergey\Desktop\jpgMaker\jpgMaker\bin\Debug\jpgMaker.pdb
+C:\Users\Sergey\Desktop\jpgMaker\jpgMaker\obj\Debug\jpgMaker.csprojAssemblyReference.cache
+C:\Users\Sergey\Desktop\jpgMaker\jpgMaker\obj\Debug\jpgMaker.Form1.resources
+C:\Users\Sergey\Desktop\jpgMaker\jpgMaker\obj\Debug\jpgMaker.Properties.Resources.resources
+C:\Users\Sergey\Desktop\jpgMaker\jpgMaker\obj\Debug\jpgMaker.csproj.GenerateResource.cache
+C:\Users\Sergey\Desktop\jpgMaker\jpgMaker\obj\Debug\jpgMaker.csproj.CoreCompileInputs.cache
+C:\Users\Sergey\Desktop\jpgMaker\jpgMaker\obj\Debug\jpgMaker.exe
+C:\Users\Sergey\Desktop\jpgMaker\jpgMaker\obj\Debug\jpgMaker.pdb
+C:\Users\Sergey\Desktop\jpgMaker\jpgMaker\bin\Debug\AForge.dll
+C:\Users\Sergey\Desktop\jpgMaker\jpgMaker\bin\Debug\AForge.Video.dll
+C:\Users\Sergey\Desktop\jpgMaker\jpgMaker\bin\Debug\AForge.xml
+C:\Users\Sergey\Desktop\jpgMaker\jpgMaker\bin\Debug\AForge.Video.xml
+C:\Users\Sergey\Desktop\jpgMaker\jpgMaker\obj\Debug\jpgMaker.csproj.CopyComplete
