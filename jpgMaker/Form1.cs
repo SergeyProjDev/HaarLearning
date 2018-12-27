@@ -15,43 +15,38 @@ namespace jpgMaker
         }
 
 
-
-
-
-        string dir;
-
-        string Save()
-        {
-            OpenFileDialog folderBrowser = new OpenFileDialog();
-
-            folderBrowser.ValidateNames = false;
-            folderBrowser.CheckFileExists = false;
-            folderBrowser.CheckPathExists = true;
-            folderBrowser.FileName = "Select";
-
-            if (folderBrowser.ShowDialog() == DialogResult.OK)
-                return Path.GetDirectoryName(folderBrowser.FileName);
-            else
-                return null;
-        }
-
-
-
         
 
         MJPEGStream stream;
 
         void Form1_Load(object sender, EventArgs e)
         {
-            dir = Save();
-            if (!Directory.Exists(dir + "/negative"))
-                Directory.CreateDirectory(dir + "/negative");
-            if (!Directory.Exists(dir + "/positive/rawdata"))
-                Directory.CreateDirectory(dir + "/positive/rawdata");
+            //Cleaning dir`s
+            try
+            {
+                string[] filePaths;
+                filePaths = System.IO.Directory.GetFiles(@"negative\", "*.jpg");
+                foreach (string filePath in filePaths) System.IO.File.Delete(filePath);
 
-            MessageBox.Show("Welcome!\nHold Shift to record");
+                filePaths = System.IO.Directory.GetFiles(@"positive\rawdata\", "*.bmp");
+                foreach (string filePath in filePaths) System.IO.File.Delete(filePath);
 
-            stream = new MJPEGStream("http://192.168.1.196:4747/mjpegfeed?596x385"); //IP+Port
+                System.IO.DirectoryInfo di = new DirectoryInfo(@"cascades\");
+                foreach (DirectoryInfo dir in di.GetDirectories()) dir.Delete(true);
+
+                filePaths = System.IO.Directory.GetFiles(@"vector\", "*.vec");
+                foreach (string filePath in filePaths) System.IO.File.Delete(filePath);
+            }
+            catch (Exception Ex) {
+                MessageBox.Show(Ex.ToString());
+            }
+
+            //Getting IP DroidCam Link
+            IPStream IPGet = new IPStream();
+            IPGet.ShowDialog(); 
+
+            //Starting stream
+            stream = new MJPEGStream(IPGet.StreamLink);
             stream.NewFrame += stream_NewFrame;
             stream.Start();
         }
@@ -61,7 +56,9 @@ namespace jpgMaker
 
 
         Random rnd = new Random();
-        int counter = 0;
+        public static int counter = 1;
+        public static int pos = 1;
+        int five = 1;
 
         void stream_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
@@ -77,28 +74,39 @@ namespace jpgMaker
                 CroppedBmp = orig.Clone(new System.Drawing.Rectangle(255, 155, 140, 140), bmp.PixelFormat);
             }
 
-            if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift) //on Shift Hold
+            //on Shift Hold
+            
+            if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift) 
             {
-                //SavePhoto(CroppedBmp, dir + "/positive/rawdata/", ".bmp");
+                if (five == 5)
+                {
+                    SavePhoto(CroppedBmp, "positive/rawdata/", ".bmp");
+                    five = 1;
+                    pos++;
+                }
+                    
 
                 using (Pen pen = new Pen(Color.FromArgb(0, 255, 0), 3))
                 {
-                    int ax = rnd.Next(633-150);
-                    int ay = rnd.Next(461-150);
-                    while ((ax > 255) && (ax < 405))
-                        ax = rnd.Next(633 - 50);
-                    while ((ay > 105) && (ay < 245))
-                        ay = rnd.Next(461 - 50);
-                    CroppedBmp = bmp.Clone(new System.Drawing.Rectangle(ax, ay, 150, 150), bmp.PixelFormat);
-                    g.DrawRectangle(pen, ax, ay, 150, 150);
+                    int ax = rnd.Next(633-100);
+                    int ay = rnd.Next(461-100);
+                    while ( (ax > 150) && (ax < 400) )
+                        ax = rnd.Next(633 - 100);
+                    while ( (ay > 50) && (ay < 300) )
+                        ay = rnd.Next(461 - 100);
+                    CroppedBmp = bmp.Clone(new System.Drawing.Rectangle(ax, ay, 100, 100), bmp.PixelFormat);
+                    g.DrawRectangle(pen, ax, ay, 100, 100);
                 }
-                //SavePhoto(CroppedBmp, dir + "/negative/", ".jpg");
+                SavePhoto(CroppedBmp, "negative/", ".jpg");
+                five++;
+
                 counter++;
             }
 
-            g.Dispose();  
-            
-            pictureBox1.Image = bmp; //paint
+            g.Dispose();
+
+            //paint
+            pictureBox1.Image = bmp; 
         }
 
 
@@ -145,6 +153,23 @@ namespace jpgMaker
 
 
 
-        void SavePhoto(Bitmap Bmp, string path, string format) => Bmp.Save(path + counter + format);
+        void SavePhoto(Bitmap Bmp, string path, string format)
+            => Bmp.Save(path + counter + format);
+
+
+
+
+
+        void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                this.Hide();
+                Form2 form2 = new Form2();
+                form2.Show();
+            }
+            
+                
+        }
     }
 }
