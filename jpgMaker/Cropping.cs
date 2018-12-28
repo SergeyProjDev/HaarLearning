@@ -35,12 +35,15 @@ namespace jpgMaker
             DirectoryInfo d = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory+"positive/rawdata");//Assuming Test is your Folder
             FileInfo[] Files = d.GetFiles("*.*"); //Getting Text files
             string str = "";
-            
+
+            Bitmap bmp;
+
             using (StreamWriter writer = new StreamWriter("positive/info.txt"))
             {
                 foreach (FileInfo file in Files)
                 {
-                    str = "rawdata/"+file.Name+" 1 1 1 148 148";
+                    bmp = new Bitmap(AppDomain.CurrentDomain.BaseDirectory+"positive/rawdata/"+file.Name);
+                    str = "rawdata/"+file.Name+" 1 1 1 "+(bmp.Width-2).ToString()+" "+(bmp.Height-2).ToString();
                     writer.WriteLine(str);
                 }
             }

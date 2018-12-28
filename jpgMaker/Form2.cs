@@ -15,7 +15,7 @@ namespace jpgMaker
 
         void Form2_Shown(object sender, EventArgs e)
         {
-            int nNeg = Form1.counter;
+            int nNeg = Form1.neg;
             int nPos = Form1.pos;
 
             Step1();
@@ -115,19 +115,27 @@ namespace jpgMaker
 
         string getSaveAddress()
         {
-            while (true){
+            while (true)
+            {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.Title = "Сохранение Хаара.xml";
+                saveFileDialog.Title = "Сохранение [name].xml";
                 saveFileDialog.FileName = "myhaar.xml";
                 saveFileDialog.Filter = "xml|*.xml|All files|*.*";
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                    return saveFileDialog.FileName;
-                MessageBox.Show("Error!");
+                try
+                {
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                        return saveFileDialog.FileName;
+                    MessageBox.Show("Error!");
+                        return null;
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
             }
-            
         }
 
-        void CloseApplication()
+        public void CloseApplication()
         {
             Process[] proc = Process.GetProcessesByName("jpgMaker");
             proc[0].Kill();

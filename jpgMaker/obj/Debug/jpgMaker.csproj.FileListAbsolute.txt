@@ -29,3 +29,4 @@ C:\Users\Sergey\Desktop\HaarLearning\jpgMaker\obj\Debug\jpgMaker.pdb
 C:\Users\Sergey\Desktop\HaarLearning\jpgMaker\obj\Debug\jpgMaker.IPStream.resources
 C:\Users\Sergey\Desktop\HaarLearning\jpgMaker\obj\Debug\jpgMaker.Form2.resources
 C:\Users\Sergey\Desktop\HaarLearning\jpgMaker\obj\Debug\jpgMaker.Cropping.resources
+C:\Users\Sergey\Desktop\HaarLearning\jpgMaker\bin\Debug\jpgMaker.exe.config
