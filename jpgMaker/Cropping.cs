@@ -39,5 +39,11 @@ namespace jpgMaker
             }
             this.Hide();
         }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            string address = "https://www.cs.auckland.ac.nz/~m.rezaei/Tutorials/Creating_a_Cascade_of_Haar-Like_Classifiers_Step_by_Step.pdf";
+            System.Diagnostics.Process.Start(address);
+        }
     }
 }

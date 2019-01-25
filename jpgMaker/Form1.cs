@@ -204,6 +204,13 @@ namespace jpgMaker
                 drawing = true;
             }
         }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+            string address = "https://www.cs.auckland.ac.nz/~m.rezaei/Tutorials/Creating_a_Cascade_of_Haar-Like_Classifiers_Step_by_Step.pdf";
+            System.Diagnostics.Process.Start(address);
+        }
+
         void pictureBox1_MouseMove(object sender, MouseEventArgs e)//Moving
         {
             if (newSize)
@@ -257,7 +264,8 @@ namespace jpgMaker
                          "     F - switch on Foreground;\n" +
                          "     N - next camera size.\n" +
                          "  Hold:\n" +
-                         "     Shift - record.\n";
+                         "     Shift - record.\n" +
+                         "  ESC - continue";
             MessageBox.Show(msg, "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
