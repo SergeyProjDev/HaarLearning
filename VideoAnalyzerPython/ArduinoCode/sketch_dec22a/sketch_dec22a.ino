@@ -3,6 +3,11 @@ const int CLK = 12; //Set the CLK
 const int DIO = 13; //Set the DIO
 TM1637Display display(CLK, DIO);  //set up the 4-Digit Display.
 
+// CLK - 12
+// DIO - 13
+// VCC - 5v
+// GND - GND
+
 void setup()
 {
   Serial.begin(9600);
