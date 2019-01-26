@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -30,8 +31,13 @@ namespace jpgMaker
 
             if (!StreamCheck(StreamLink))
             {
-                MessageBox.Show("Error! \n      Check:\n - you started DroidCam"+
-                                    "\n - local devices are connected\n - ip\n - port");
+                string msg = "  Check:\n" +
+                             "      - DroidCam started\n" +
+                             "      - local devices are connected\n" +
+                             "      - ip\n" +
+                             "      - port";
+                MessageBox.Show(msg, "Error! Wrong URL!",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
                 
@@ -60,10 +66,7 @@ namespace jpgMaker
                 response.Close();
                 return true;
             }
-            catch (Exception)
-            {
-                return false;
-            }
+            catch (Exception){ return false;}
         }
 
 
@@ -117,14 +120,12 @@ namespace jpgMaker
                     using (var fStream = File.OpenRead(serializedFileName))
                     {
                         BinaryFormatter formatter1 = new BinaryFormatter();
-
                         exemplar1 = (Data)formatter1.Deserialize(fStream);
                         return exemplar1;
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    Console.WriteLine(ex.Message);
                     exemplar1 = null;
                     return exemplar1;
                 }
@@ -136,15 +137,22 @@ namespace jpgMaker
                     BinaryFormatter formatter = new BinaryFormatter();
                     using (var fStream = new FileStream(serializedFileName, FileMode.Create, 
                                                             FileAccess.Write, FileShare.None))
-                    {
                         formatter.Serialize(fStream, serObj);
-                    }
+                    
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
+                catch (Exception){}
             }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Process.GetCurrentProcess().Kill();
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            string address = "https://github.com/SergeyProjDev/HaarLearning.git";
+            System.Diagnostics.Process.Start(address);
         }
     }
 }

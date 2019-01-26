@@ -132,6 +132,7 @@
     <None Include="bin\Debug\machine_learning.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="bin\Debug\roboDance.png" />
     <Content Include="icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
