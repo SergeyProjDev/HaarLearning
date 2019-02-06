@@ -5,10 +5,14 @@ import os
 import urllib.request
 import numpy as np
 import csv
+import sys
 import matplotlib.pyplot as plt
 from tkinter import *
+from tkinter.filedialog import askopenfilename
 from PIL import Image, ImageOps
 
+
+useArduino = False;
 
 #get serialization and parce it (url)
 def getSerializedURL():
@@ -78,22 +82,36 @@ def initPort(Port):
 	return arduinoSerialData
 
 
-def main():
-	url = getSerializedURL()
+#ask to use arduino
+def arduino():
+	while True:
+		print("Do you want to use Arduino? (y/n)")
+		inp = input()
+		if (inp == "y"):
+			return True
+		elif (inp == "n"):
+			return False
+		else:
+			continue
 
-	url = askURL(url)
 
-	port = getCOMPort()
-	arduinoSerialData = initPort(port)
-
-	#connect to haar
-	hand_cascade = cv2.CascadeClassifier('myhaar.xml')
-
-	processImgs(url, hand_cascade, arduinoSerialData)
+#getting haar.xml path
+def chooseFileXML():
+	print ("Now choose Cascade Haar file(.xml)")
+	window = Tk()
+	window.withdraw()
+	filePath = askopenfilename(
+		title = "Choose Cascade Haar file(.xml)",
+		filetypes = [('xml', '.xml')]
+	)
+	xmlPath = cv2.CascadeClassifier(filePath)
+	window.destroy()
+	print (filePath)
+	return xmlPath
 
 
 #each img processing
-def processImgs(url, hand_cascade, arduinoSerialData):
+def processImgs(url, handCascade, arduinoSerialData = 0):
 	while True:
 		#Get img
 		imgResp = urllib.request.urlopen(url)
@@ -101,25 +119,45 @@ def processImgs(url, hand_cascade, arduinoSerialData):
 		cvimg = cv2.imdecode(imgNp, -1)
 
 		#Mirror
-		im_pil = Image.fromarray(cvimg)
-		im_pil = ImageOps.mirror(im_pil)
-		cvimg = np.array(im_pil)
+		imPil = Image.fromarray(cvimg)
+		imPil = ImageOps.mirror(imPil)
+		cvimg = np.array(imPil)
 
 		#analys
 		gray = cv2.cvtColor(cvimg, cv2.COLOR_RGB2GRAY)
-		hand=hand_cascade.detectMultiScale(gray, 1.15, 20)
+		hand = handCascade.detectMultiScale(gray, 1.15, 20)
 		count = 0
 		for (x, y, w, h) in hand:
 			count = count + 1
 			cv2.rectangle(cvimg, (x,y), (x+w, y+h), (0,0,255), 5)
-			roi_gray = gray[y: y+h, x:x+w]
-			roi_color = cvimg[y: y+h, x:x+w]
-		arduinoSerialData.write(str.encode(str(count)+"\n"))
+			roiGray = gray[y: y+h, x:x+w]
+			roiColor = cvimg[y: y+h, x:x+w]
+		
+		if (useArduino):
+			arduinoSerialData.write(str.encode(str(count)+"\n"))
 	
 		#show
-		cv2.imshow('Camera img', cvimg)
-		cv2.waitKey(10)
+		cv2.imshow('Show objects! (Press ESC to exit)', cvimg)
+		if cv2.waitKey(10) == 27:
+			sys.exit()
 
 
-print ("Use \"IPWebcam\" on your Android. Start server and print URL: \n")
+# Program start point! #
+def main():
+	#ip WebCam url
+	url = getSerializedURL()
+	url = askURL(url)
+
+	useArduino = arduino()
+	if (useArduino):
+		port = getCOMPort()
+		arduinoSerialData = initPort(port)
+
+	handCascade = chooseFileXML()
+
+	processImgs(url, handCascade)
+	print ("Thanks for using!")
+
+
+print ("Use \"IPWebcam\" on your Android. Start server and print URL:\n")
 main()
